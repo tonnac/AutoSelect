@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Experience } from "./Components/Index";
+import Item from "./Components/Item";
+import useInput from "./Hooks/useInput";
 
-function App() {
+export interface ItemInterface {
+  count: number;
+  expValue: number;
+}
+
+const App = () => {
+  const current = useInput("");
+  const target = useInput("");
+  const [itemInfos, setItemInfos] = useState<ItemInterface[]>([]);
+
+  const onClickPlus = (e: any) => {
+    setItemInfos((itemInfos) => [...itemInfos, { count: 0, expValue: 0 }]);
+  };
+
+  const onClickMinus = (e: any) => {
+    setItemInfos(itemInfos.splice(0, 1));
+  };
+
+  itemInfos.map((v) => {
+    console.log(v);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>
+        <Experience current={current} target={target}></Experience>
+      </div>
+      <div style={{ padding: 20 }}>
+        <button style={{ marginRight: 20 }} onClick={onClickPlus}>
+          +
+        </button>
+        <button onClick={onClickMinus}>-</button>
+      </div>
+      <div>
+        {itemInfos?.map((v, i) => (
+          <Item
+            key={i}
+            index={i}
+            items={itemInfos}
+            setItems={setItemInfos}
+          ></Item>
+        ))}
+      </div>
+      <button style={{ marginTop: 25 }}>계산</button>
     </div>
   );
-}
+};
 
 export default App;
